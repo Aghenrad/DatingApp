@@ -9,10 +9,11 @@ import { Observable, throwError } from 'rxjs';
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
+import { NgxGalleryThumbnailsComponent } from '@kolkov/ngx-gallery';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private router: Router, private toastr: ToastrService) {}
+  constructor(private router: Router, private toastr: ToastrService) { }
 
   intercept(
     request: HttpRequest<unknown>,
@@ -31,19 +32,21 @@ export class ErrorInterceptor implements HttpInterceptor {
                   }
                 }
                 throw modalStateErrors.flat();
-              } else {
+              } else if (typeof (error.error) === 'object') {
                 this.toastr.error(error.statusText == "OK" ? "Bad Request" : error.statusText, error.status);
+              } else {
+                this.toastr.error(error.error, error.status);
               }
               break;
             case 401:
-              this.toastr.error(error.statusText ==="OK" ? "Unauthorised" : error.statusText, error.status);
+              this.toastr.error(error.statusText === "OK" ? "Unauthorised" : error.statusText, error.status);
               break;
             case 404:
               this.router.navigateByUrl('/not-found');
               break;
             case 500:
-              const navigationExtras: NavigationExtras = {state: {error: error.error}};
-              this.router.navigateByUrl('/server-error',navigationExtras);
+              const navigationExtras: NavigationExtras = { state: { error: error.error } };
+              this.router.navigateByUrl('/server-error', navigationExtras);
               break;
             default:
               this.toastr.error('Something unexpected went wrong');
