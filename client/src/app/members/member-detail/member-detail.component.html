@@ -7,6 +7,12 @@
         class="car-img-top img-thumbnail"
       />
       <div class="card-body">
+        <div
+          class="mb-2"
+          *ngIf="(presence.onlineUsers$ | async).includes(member.username)"
+        >
+          <i class="fa fa-user-circle text-success"></i> Online now
+        </div>
         <div>
           <strong>Location:</strong>
           <p>{{ member.city }}, {{ member.country }}</p>
@@ -26,9 +32,8 @@
       </div>
       <div class="card-footer">
         <div class="btn-group d-flex">
-          <button class="btn btn-primary" (click)="addLike(member)">
-            Like
-          </button>
+          <!-- <button class="btn btn-primary" (click)="addLike(member)"> -->
+          <button class="btn btn-primary">Like</button>
           <button class="btn btn-success" (click)="selectTab(3)">
             Message
           </button>
@@ -60,10 +65,7 @@
         ></ngx-gallery>
       </tab>
       <tab heading="Messages" (selectTab)="onTabActivated($event)">
-        <app-member-messages
-          [messages]="messages"
-          [username]="member.username"
-        ></app-member-messages>
+        <app-member-messages [username]="member.username"></app-member-messages>
       </tab>
     </tabset>
   </div>
