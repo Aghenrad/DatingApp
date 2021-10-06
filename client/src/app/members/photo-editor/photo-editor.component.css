@@ -12,4 +12,20 @@ input[type="file"] {
   color: transparent;
 }
 
+.not-approved {
+  opacity: 0.2;
+}
 
+.img-wrapper {
+  position: relative;
+}
+
+.img-text {
+  position: absolute;
+  bottom: 30%;
+}
+
+.btn {
+  font-size: 0.7em;
+  padding: 0.8em;
+}
